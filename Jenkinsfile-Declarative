@@ -1,6 +1,7 @@
 pipeline
 {
-agent any
+//agent any
+agent {label 'Flipkart-node'}
 tools {
   git 'Default'
   maven 'maven3.8.6'
