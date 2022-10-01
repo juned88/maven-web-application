@@ -9,6 +9,9 @@ options {
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
   timestamps()
 }
+parameters {
+  choice choices: ['master', 'Test', 'development', 'QC'], description: 'echo "enter the branch"', name: 'Branches'
+}
 
 stages
 {
