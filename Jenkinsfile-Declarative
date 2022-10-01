@@ -10,8 +10,9 @@ options {
   timestamps()
 }
 parameters {
-  choice choices: ['master', 'Test', 'development', 'QC'], description: 'echo "enter the branch"', name: 'Branches'
+  choice choices: ['master', 'Test', 'development', 'QC'], description: 'Branch Name is ', name: 'Branches'
 }
+
 
 stages
 {
@@ -20,7 +21,7 @@ stage('Git Fetch')
 {
 steps
 {
-git branch: 'Test', credentialsId: 'e981d4ed-aa30-4ae5-aaa3-dd283a9cfdb2', url: 'https://github.com/juned88/maven-web-application.git'
+git branch: "${params.Branches}", credentialsId: 'e981d4ed-aa30-4ae5-aaa3-dd283a9cfdb2', url: 'https://github.com/juned88/maven-web-application.git'
 }
 }
 // Building the package
