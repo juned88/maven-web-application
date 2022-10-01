@@ -9,6 +9,9 @@ options {
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
   timestamps()
 }
+parameters {
+  string defaultValue: 'Juned Ahmed', description: 'Person name is ', name: 'Personname'
+}
 
 stages
 {
