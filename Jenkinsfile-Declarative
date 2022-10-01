@@ -1,0 +1,58 @@
+pipeline
+{
+agent any
+tools {
+  git 'Default'
+  maven 'maven3.8.6'
+}
+options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
+  timestamps()
+}
+
+stages
+{
+// Fetch the code from Git
+stage('Git Fetch')
+{
+steps
+{
+git branch: 'Test', credentialsId: 'e981d4ed-aa30-4ae5-aaa3-dd283a9cfdb2', url: 'https://github.com/juned88/maven-web-application.git'
+}
+}
+// Building the package
+stage('Package building')
+{
+steps
+{
+sh "mvn clean package"
+}
+}
+//Publish the sonar report
+stage('Sonar Report')
+{
+steps
+{
+sh "mvn sonar:sonar"
+}
+}
+// Upload the package to the nexus repo
+stage('Upload to repo')
+{
+steps
+{
+sh "mvn deploy"
+}
+}
+//'Deploy to Tomcat server
+stage('Deploy to tomcat')
+{
+steps
+{
+sshagent(['07554c0f-33fa-434f-9160-df9e8e140cef']) {
+sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war  ec2-user@15.207.107.109:/opt/apache-tomcat-9.0.67/webapps"
+}
+}
+}
+}// closing of piepline
+}// closing of stages
