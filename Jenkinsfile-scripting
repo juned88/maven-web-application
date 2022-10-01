@@ -1,0 +1,26 @@
+node
+{
+def mavenhome=tool name: "maven3.8.6"
+stage('Git fetch')
+{
+git branch: 'development', credentialsId: 'e981d4ed-aa30-4ae5-aaa3-dd283a9cfdb2', url: 'https://github.com/juned88/maven-web-application.git'
+}
+stage('Pcakge building')
+{
+sh "${mavenhome}/bin/mvn clean package"
+}
+stage('sonar report')
+{
+sh "${mavenhome}/bin/mvn sonar:sonar clean package"
+}
+stage('upload to repo')
+{
+sh "${mavenhome}/bin/mvn sonar:sonar clean package deploy"
+}
+stage('deploy to tomcat')
+{
+sshagent(['07554c0f-33fa-434f-9160-df9e8e140cef']) {
+sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war  ec2-user@15.207.107.109:/opt/apache-tomcat-9.0.67/webapps"
+}
+}
+}//node closing
