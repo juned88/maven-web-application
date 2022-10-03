@@ -1,7 +1,7 @@
 pipeline
 {
 //agent any
-{label: 'NODES'}
+agent {label: 'NODES'}
 tools {
   git 'Default'
   maven 'maven3.8.6'
