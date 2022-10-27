@@ -1,0 +1,21 @@
+node
+{
+def mavenhome=tool name: "maven3.8.6"
+    stage('git fetch')
+    {
+        git branch: 'development', credentialsId: 'c65f3e1e-695d-46fd-9f16-5a3632d66546', url: 'https://github.com/juned88/maven-web-application.git'
+    }
+    stage('package building')
+    {
+        sh "${mavenhome}/bin/mvn clean package"
+    }
+    stage('sonar report')
+
+    {
+        sh "${mavenhome}/bin/mvn sonar:sonar"
+    }
+    stage('upload to repo')
+    {
+        sh "${mavenhome}/bin/mvn deploy"
+    }
+}//node closing
