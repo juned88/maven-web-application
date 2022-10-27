@@ -1,0 +1,53 @@
+pipeline
+{
+    agent any
+    options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
+}
+
+ tools {
+  maven 'maven3.8.6'
+  git 'Default'
+}
+    stages
+    {
+        stage('Code fetch')
+        {
+            steps
+            {
+                git branch: 'development', credentialsId: 'c65f3e1e-695d-46fd-9f16-5a3632d66546', url: 'https://github.com/juned88/maven-web-application.git'
+            }
+        }
+        stage('package building')
+        {
+            steps
+            {
+                sh "mvn clean package" 
+            }
+        }
+        stage('Sonar report')
+        {
+            steps
+            {
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage('upload to nexus repo')
+        {
+            steps
+            {
+                sh "mvn deploy"
+            }
+        }
+        stage('Deploy to tomcat')
+        {
+            steps
+            {
+               sshagent(['1b861d9e-25f1-4122-b5ab-899d04e7c4ba']) {
+   sh " scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.234.112.41:/opt/apache-tomcat-9.0.68/webapps"
+
+} 
+            }
+        }
+    }//stages closing
+}//pipeline closing
