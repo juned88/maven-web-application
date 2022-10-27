@@ -1,6 +1,7 @@
 pipeline
 {
-    agent any
+    //agent any
+    agent{label 'Vishal'}
     options {
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
 }
