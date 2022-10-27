@@ -1,4 +1,4 @@
-node
+node('Built-In Node')
 {
 def mavenhome=tool name: "maven3.8.6"
     stage('git fetch')
